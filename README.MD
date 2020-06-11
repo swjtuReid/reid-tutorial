@@ -9,7 +9,7 @@
 # 运行相关
  * 模型定义: modeling/
  * loss函数: loss/\_init_.py
- * 训练过程: engine\trainer.py
+ * 训练过程: engine/trainer.py
  
 # 训练
 ## 开始训练
