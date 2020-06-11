@@ -15,6 +15,7 @@ from .backbones.senet import SENet, SEResNetBottleneck, SEBottleneck, SEResNeXtB
 from .backbones.resnet_ibn_a import resnet50_ibn_a
 from .backbones.attentions import PAM_Module, CAM_Module
 
+
 def weights_init_kaiming(m):
     classname = m.__class__.__name__
     if classname.find('Linear') != -1:
@@ -135,13 +136,13 @@ class Baseline(nn.Module):
             self.base.load_param(model_path)
             print('Loading pretrained ImageNet model......')
 
-        #init
+        # init
         self.num_classes = num_classes
         self.neck = neck
         self.neck_feat = neck_feat
         self.class_block = class_block
-        
-        #global feature
+
+        # global feature
         self.gap = nn.AdaptiveAvgPool2d(1)
 
         if self.neck == 'no':
@@ -155,7 +156,7 @@ class Baseline(nn.Module):
         self.classifier.apply(weights_init_classifier)    
             
     def forward(self, x):
-        #global_feat = self.base(x) # (b, 2048, 24, 8)
+        # global_feat = self.base(x) # (b, 2048, 24, 8)
         global_feat = self.gap(self.base(x))  # (b, 2048, 1, 1)
         global_feat = global_feat.view(global_feat.shape[0], -1)  # flatten to (batch_size, 2048)
 

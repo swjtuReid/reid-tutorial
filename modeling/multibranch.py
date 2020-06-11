@@ -16,6 +16,7 @@ from .backbones.senet import SENet, SEResNetBottleneck, SEBottleneck, SEResNeXtB
 from .backbones.resnet_ibn_a import resnet50_ibn_a
 from .backbones.attentions import PAM_Module, CAM_Module
 
+
 def weights_init_kaiming(m):
     classname = m.__class__.__name__
     if classname.find('Linear') != -1:
@@ -38,13 +39,15 @@ def weights_init_classifier(m):
         if m.bias:
             nn.init.constant_(m.bias, 0.0)
 
+
 def _init_reduction(reduction):  # 初始化降维层
     # conv
     nn.init.kaiming_normal_(reduction[0].weight, mode='fan_in')
     # bn
     nn.init.normal_(reduction[1].weight, mean=1., std=0.02)
     nn.init.constant_(reduction[1].bias, 0.)
-            
+
+
 class MultiBranch(nn.Module):
     in_planes = 2048
 
@@ -142,18 +145,17 @@ class MultiBranch(nn.Module):
             self.base.load_param(model_path)
             print('Loading pretrained ImageNet model......')
 
-        #init
+        # init
         self.num_classes = num_classes
         self.neck = neck
         self.neck_feat = neck_feat
         self.class_block = class_block
 
-        #池化层
+        # 池化层
         self.global_gap = nn.AdaptiveAvgPool2d(1) 
         self.part_gap = nn.AdaptiveAvgPool2d((6, 1)) 
 
-        
-        # 1x1卷积层，降维
+        # 1x1卷积层,降维
         reduction = nn.Sequential(nn.Conv2d(2048, self.in_planes, 1, bias=False), nn.BatchNorm2d(self.in_planes), nn.ReLU())
         _init_reduction(reduction)
 
@@ -183,15 +185,15 @@ class MultiBranch(nn.Module):
         self.classifier_6.apply(weights_init_classifier)    
         
     def forward(self, x):
-        #global branch及part branch共享主干网络
+        # global branch及part branch共享主干网络
         x = self.base(x)
 
         # global branch
-        global_feat = self.global_gap(x) # (b, 2048, 1, 1)
+        global_feat = self.global_gap(x)  # (b, 2048, 1, 1)
         global_feat = self.reduction_global(global_feat).squeeze(dim=3).squeeze(dim=2)  # (b, 256)
         cls_score = self.classifier_global(global_feat)
         
-        #part branch
+        # part branch
         part_feat = self.part_gap(x)  # (b, 2048, 6, 1)
         
         part_1 = part_feat[:, :, 0:1, :]  # (b, 2048, 1, 1)
