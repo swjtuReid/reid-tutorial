@@ -199,11 +199,11 @@ class Part(nn.Module):
         feat_6 = self.reduction_6(part_6).squeeze(dim=3).squeeze(dim=2)
         
         cls_score_1 = self.classifier_1(feat_1)
-        cls_score_2 = self.classifier_1(feat_1)
-        cls_score_3 = self.classifier_1(feat_1)
-        cls_score_4 = self.classifier_1(feat_1)
-        cls_score_5 = self.classifier_1(feat_1)
-        cls_score_6 = self.classifier_1(feat_1)
+        cls_score_2 = self.classifier_1(feat_2)
+        cls_score_3 = self.classifier_1(feat_3)
+        cls_score_4 = self.classifier_1(feat_4)
+        cls_score_5 = self.classifier_1(feat_5)
+        cls_score_6 = self.classifier_1(feat_6)
         
         predict = torch.cat([feat_1, feat_2, feat_3, feat_4, feat_5, feat_6], dim=1)                    
         classifier_feats = [cls_score_1, cls_score_2, cls_score_3, cls_score_4, cls_score_5, cls_score_6]
