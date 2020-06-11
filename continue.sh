@@ -1,0 +1,1 @@
+python tools/train.py --config_file='configs/baseline_alltricks.yml' MODEL.DEVICE_ID "('0')" DATASETS.NAMES "('market1501')" DATASETS.ROOT_DIR "('dataset')" INPUT.DATA_AUGMENTATION "('RE')" MODEL.PRETRAIN_CHOICE "('self')" MODEL.PRETRAIN_PATH "('experiment/base-alltricks/resnet50_model_2.pth')" OUTPUT_DIR "('experiment/test')" MODEL.TYPE "('base')"

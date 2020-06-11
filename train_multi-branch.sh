@@ -1,0 +1,1 @@
+python tools/train.py --config_file='configs/multibranch.yml' MODEL.DEVICE_ID "('0')"  DATASETS.NAMES "('market1501')" DATASETS.ROOT_DIR "('dataset')" OUTPUT_DIR "('experiment/multibranch')" MODEL.TYPE "('multibranch')"

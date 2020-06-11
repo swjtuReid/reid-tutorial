@@ -1,0 +1,1 @@
+python tools/test.py --config_file='configs/baseline_alltricks.yml' MODEL.DEVICE_ID "('0')" DATASETS.NAMES "('market1501')" DATASETS.ROOT_DIR "('dataset')" INPUT.DATA_AUGMENTATION "('RE')" MODEL.PRETRAIN_CHOICE "('self')" TEST.WEIGHT "('experiment/base-alltricks/resnet50_model_2.pth')" OUTPUT_DIR "('experiment/test1')" MODEL.TYPE "('base')"
