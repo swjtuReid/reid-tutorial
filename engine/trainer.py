@@ -36,6 +36,7 @@ def create_supervised_trainer(cfg, model, optimizer, loss_fn,
             model = nn.DataParallel(model)
         model.to(device)
         if cfg.SOLVER.APEX == "yes":
+            from apex import amp, optimizers
             model, optimizer = amp.initialize(model, optimizer, opt_level = "O1")
             
     def _update(engine, batch):
@@ -47,7 +48,6 @@ def create_supervised_trainer(cfg, model, optimizer, loss_fn,
         score, feat = model(img)
         loss = loss_fn(score, feat, target)
         if cfg.SOLVER.APEX == "yes":
-            from apex import amp, optimizers
             with amp.scale_loss(loss, optimizer) as scaled_loss:
                 scaled_loss.backward()
         else:
