@@ -11,7 +11,6 @@ import torch.nn as nn
 from ignite.engine import Engine, Events
 from ignite.handlers import ModelCheckpoint, Timer
 from ignite.metrics import RunningAverage
-from apex import amp, optimizers
 from utils.reid_metric import R1_mAP
 
 global ITER
@@ -48,6 +47,7 @@ def create_supervised_trainer(cfg, model, optimizer, loss_fn,
         score, feat = model(img)
         loss = loss_fn(score, feat, target)
         if cfg.SOLVER.APEX == "yes":
+            from apex import amp, optimizers
             with amp.scale_loss(loss, optimizer) as scaled_loss:
                 scaled_loss.backward()
         else:
